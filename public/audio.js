@@ -22,9 +22,9 @@ function sweep(time,duration=.16,volume=.08){let len=Math.ceil(ctx.sampleRate*du
 export function sound(name='click'){
  if(!enabled||!unlockAudio())return;
  const t=ctx.currentTime;
- const sequences={click:[76],hover:[81],draw:[57,64,69],select:[69,76],up:[60,64,69,76],down:[81,76,69,64],collect:[72,76,79,84],attack:[50,49,38],pass:[60,55],error:[50,49],win:[60,64,67,72,76,79,84],turn:[69,76],ready:[67,74,79]};
+ const sequences={click:[76],hover:[81],draw:[57,64,69],select:[69,76],up:[60,64,69,76],down:[81,76,69,64],collect:[72,76,79,84],attack:[50,49,38],pass:[60,55],error:[50,49],win:[60,64,67,72,76,79,84],turn:[69,76],tick:[84],timeout:[57,50],ready:[67,74,79]};
  const notes=sequences[name]||sequences.click,win=name==='win';
- notes.forEach((n,i)=>{tone(midi(n),t+i*(win?.12:.047),win?1.1:name==='hover'?.07:.3,name==='click'?.075:name==='hover'?.025:.11,name==='attack'?'triangle':'sine',fxBus,(i%2?1:-1)*.22);if(name==='collect'||win)tone(midi(n+12),t+i*(win?.12:.047)+.012,.55,.025,'sine')});
+ notes.forEach((n,i)=>{tone(midi(n),t+i*(win?.12:.047),win?1.1:['hover','tick'].includes(name)?.07:.3,name==='click'?.075:['hover','tick'].includes(name)?.025:.11,name==='attack'?'triangle':'sine',fxBus,(i%2?1:-1)*.22);if(name==='collect'||win)tone(midi(n+12),t+i*(win?.12:.047)+.012,.55,.025,'sine')});
  if(['draw','up','down','attack'].includes(name))sweep(t,.22,.13);
 }
 const chords=[[45,52,57,60,64,71],[41,48,53,57,60,64],[48,55,60,64,67,74],[43,50,55,59,62,69]];

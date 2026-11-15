@@ -25,7 +25,7 @@ export default {async fetch(req,env){const u=new URL(req.url),p=u.pathname;try{
   const row=await getRoom(db,m[1]);if(!row)return json({error:'notFound'},404);const {r,version}=row;
   if(m[2]==='join'){const result=joinRoom(r,body.name);if(await commit(db,r,version))return json({...result,code:r.code});continue}
   const person=auth(r,secret);if(!person)return json({error:'auth'},403);let changed=tickRoom(r);
-  if(m[2]==='action'){actRoom(r,person,body);changed=true}
+  if(m[2]==='action'&&!changed){actRoom(r,person,body);changed=true}
   if(changed&&!await commit(db,r,version))continue;
   return json(viewRoom(r,person,r.people.map(p=>p.id)));
  }
